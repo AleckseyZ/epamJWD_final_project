@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration status="WARN">
+    <appenders>
+        <RollingFile name="RollingFileAppender" fileName="../logs/library.log" filePattern="../logs/library.%d{yyyy-MM-dd}.log.gz" append="true">
+            <PatternLayout>
+                <pattern>%d{yyy-MM-dd HH:mm:ss} [%t] %-5level - %msg%n%throwable</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" />
+            </Policies>
+        </RollingFile>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout>
+                <pattern>%d{yyy-MM-dd HH:mm:ss} [%t] %-5level - %msg%n%throwable</pattern>
+            </PatternLayout>
+        </Console>
+    </appenders>
+    <Loggers>
+        <Root level="ALL">
+            <AppenderRef ref="RollingFileAppender" />
+            <AppenderRef ref="Console" />
+        </Root>
+    </Loggers>
+</Configuration>
