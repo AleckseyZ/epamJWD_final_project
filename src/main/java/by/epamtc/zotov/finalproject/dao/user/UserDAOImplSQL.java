@@ -21,8 +21,8 @@ public class UserDAOImplSQL implements UserDAO {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(ADD_USER);
             preparedStatement.setString(1, user.getUsername());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setString(3, user.getSalt());
+            preparedStatement.setBytes(2, user.getPassword());
+            preparedStatement.setBytes(3, user.getSalt());
             preparedStatement.setString(4, user.getEmail());
             if (preparedStatement.executeUpdate() != 0) {
                 isSuccesfull = true;
@@ -45,8 +45,8 @@ public class UserDAOImplSQL implements UserDAO {
             preparedStatement.setString(1, username);
             ResultSet result = preparedStatement.executeQuery();
             if (result.next()) {
-                user = new User(result.getString("username"), result.getString("user_password"),
-                        result.getString("salt"), result.getString("email"));
+                user = new User(result.getString("username"), result.getBytes("user_password"),
+                        result.getBytes("salt"), result.getString("email"));
             }
         } catch (SQLException e) {
             throw new DAOException(e);

@@ -11,6 +11,7 @@ import javax.crypto.spec.PBEKeySpec;
 
 import by.epamtc.zotov.finalproject.dao.DAOFactory;
 import by.epamtc.zotov.finalproject.entity.User;
+import by.epamtc.zotov.finalproject.exception.DAOException;
 import by.epamtc.zotov.finalproject.exception.ServiceException;
 
 public class UserServiceImpl implements UserService {
@@ -22,42 +23,40 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean addUser(String username, char[] password, String email) throws ServiceException {
         boolean isSuccesfull = false;
+        byte[] salt = new byte[SALT_SIZE];
 
         SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[SALT_SIZE];
         random.nextBytes(salt);
 
-        User newUser = new User(username, new String(hashPasword(password, salt)), new String(salt), email);
+        byte[] hashedPassword = hashPasword(password, salt);
+        User newUser = new User(username, hashedPassword, salt, email);
         Arrays.fill(password, '0');
 
         try {
             isSuccesfull = DAOFactory.getUserDAO().addUser(newUser);
-        } catch (Exception e) {
-            // TODO: handle exception
+        } catch (DAOException e) {
+            throw new ServiceException(e);
         }
 
         return isSuccesfull;
     }
 
-    public boolean authenticate(String username, char[] password) {
+    public boolean authenticate(String username, char[] password) throws ServiceException {
         boolean isAuthentic = false;
-        byte[] passwordHash=null;
+        byte[] hashedPassword = null;
         User existingUser = null;
 
         try {
             existingUser = DAOFactory.getUserDAO().findUserByUsername(username);
-        } catch (Exception e) {
-            // TODO: handle exception
+        } catch (DAOException e) {
+            throw new ServiceException(e);
         }
 
         if (existingUser != null) {
-            try {
-                passwordHash = hashPasword(password, existingUser.getSalt().getBytes());
-            } catch (Exception e) {
-                // TODO handle exception
-            }
-            isAuthentic = Arrays.equals(existingUser.getPassword().getBytes(), passwordHash);
+            hashedPassword = hashPasword(password, existingUser.getSalt());
+            isAuthentic = Arrays.equals(existingUser.getPassword(), hashedPassword);
         }
+
         return isAuthentic;
     }
 
@@ -70,9 +69,9 @@ public class UserServiceImpl implements UserService {
             SecretKeyFactory factory = SecretKeyFactory.getInstance(ALGORITHM);
             hashedPassword = factory.generateSecret(spec).getEncoded();
         } catch (NoSuchAlgorithmException e) {
-
+            throw new ServiceException(e);
         } catch (InvalidKeySpecException e) {
-            // TODO fix exceptions
+            throw new ServiceException(e);
         }
 
         return hashedPassword;

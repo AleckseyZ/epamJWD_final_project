@@ -22,12 +22,11 @@ public class Card {
         this.statusId = statusId;
     }
 
-    public Card(int userId, String holderName, String holderPhone, Date issueDate, int statusId) {
+    public Card(int userId, String holderName, String holderPhone, Date issueDate) {
         this.userId = userId;
         this.holderName = holderName;
         this.holderPhone = holderPhone;
-        this.issueDate = issueDate;
-        this.statusId = statusId;
+        this.issueDate = issueDate; 
     }
 
     public int getCardId() {

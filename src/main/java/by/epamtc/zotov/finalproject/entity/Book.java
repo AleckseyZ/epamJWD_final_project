@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 public class Book implements Serializable {
     private int bookId;
-    private String isbn;
     private String author;
     private String blurb;
     private String title;
@@ -13,9 +12,15 @@ public class Book implements Serializable {
     public Book() {
     }
 
-    public Book(int bookId, String isbn, String author, String blurb, String title, int amount) {
+    public Book(int bookId, String author, String blurb, String title, int amount) {
         this.bookId = bookId;
-        this.isbn = isbn;
+        this.author = author;
+        this.blurb = blurb;
+        this.title = title;
+        this.amount = amount;
+    }
+
+    public Book(String author, String blurb, String title, int amount) {
         this.author = author;
         this.blurb = blurb;
         this.title = title;
@@ -28,14 +33,6 @@ public class Book implements Serializable {
 
     public void setBookId(int bookId) {
         this.bookId = bookId;
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
     }
 
     public String getAuthor() {
@@ -78,7 +75,6 @@ public class Book implements Serializable {
         result = prime * result + ((author == null) ? 0 : author.hashCode());
         result = prime * result + ((blurb == null) ? 0 : blurb.hashCode());
         result = prime * result + bookId;
-        result = prime * result + ((isbn == null) ? 0 : isbn.hashCode());
         result = prime * result + ((title == null) ? 0 : title.hashCode());
         return result;
     }
@@ -106,11 +102,6 @@ public class Book implements Serializable {
             return false;
         if (bookId != other.bookId)
             return false;
-        if (isbn == null) {
-            if (other.isbn != null)
-                return false;
-        } else if (!isbn.equals(other.isbn))
-            return false;
         if (title == null) {
             if (other.title != null)
                 return false;
@@ -121,7 +112,7 @@ public class Book implements Serializable {
 
     @Override
     public String toString() {
-        return "Book [amount=" + amount + ", author=" + author + ", blurb=" + blurb + ", bookId=" + bookId + ", isbn="
-                + isbn + ", title=" + title + "]";
+        return "Book [amount=" + amount + ", author=" + author + ", blurb=" + blurb + ", bookId=" + bookId + ", title="
+                + title + "]";
     }
 }

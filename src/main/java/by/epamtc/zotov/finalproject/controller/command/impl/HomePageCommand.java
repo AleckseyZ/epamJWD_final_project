@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import by.epamtc.zotov.finalproject.controller.PagePath;
 import by.epamtc.zotov.finalproject.controller.command.Command;
 import by.epamtc.zotov.finalproject.entity.Notice;
 import by.epamtc.zotov.finalproject.exception.ServiceException;
@@ -15,7 +16,6 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 public class HomePageCommand implements Command {
-
     private static final Logger logger = LogManager.getLogger();
 
     @Override
@@ -27,7 +27,6 @@ public class HomePageCommand implements Command {
         } catch (ServiceException e) {
             logger.error("Couldn't get notices",e);
         }
-        //TODO fix hardcode path
-        request.getRequestDispatcher("WEB-INF/jsp/homePage.jsp").forward(request, response);
+        request.getRequestDispatcher(PagePath.HOME_PAGE_PATH).forward(request, response);
     }
 }

@@ -13,9 +13,7 @@
     <header>
       <%@include file="common\nav.jsp"%>
     </header>
-    <h1><f:message key="label.librarianMenu"/></h1>
-    <p><f:message key="label.cardMenu"/></p>
-    <p><f:message key="label.loanMenu"/></p>    
+    <h1><f:message key="label.loanMenu"/></h1> 
     <%@include file="common\footer.jsp"%>
 </body>
 

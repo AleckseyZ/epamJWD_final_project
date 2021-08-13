@@ -6,7 +6,7 @@
 
 <head>
     <%@include file="common\language.jsp"%>
-    <title><f:message key="label.title"/></title>
+    <title><f:message key="label.pageTitle"/></title>
 </head>
 
 <body>

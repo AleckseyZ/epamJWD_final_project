@@ -29,8 +29,9 @@ public class Controller extends HttpServlet {
             throws ServletException, IOException {
         String commandName = request.getParameter("command");
         Command command = CommandFactory.getCommand(commandName);
+        
         if (command == null) {
-            request.getRequestDispatcher("WEB-INF/jsp/error404Page.jsp").forward(request, response);
+            request.getRequestDispatcher(PagePath.NOT_FOUND_PAGE).forward(request, response);
         } else {
             command.execute(request, response);
         }

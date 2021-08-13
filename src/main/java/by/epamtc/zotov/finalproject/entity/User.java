@@ -1,31 +1,33 @@
 package by.epamtc.zotov.finalproject.entity;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class User implements Serializable {
     private int userId;
     private int userTypeId;
     private String username;
-    private String password;
-    private String salt;
+    private byte[] password;
+    private byte[] salt;
     private String email;
 
     public User() {
     }
 
-    public User(int userId, int userTypeId, String username, String password, String email) {
+    public User(int userId, int userTypeId, String username, byte[] password, byte[] salt, String email) {
         this.userId = userId;
         this.userTypeId = userTypeId;
         this.username = username;
         this.password = password;
+        this.salt = salt;
         this.email = email;
     }
 
-    public User(String username, String password, String salt, String email) {
+    public User(String username, byte[] password, byte[] salt, String email) {
         this.username = username;
         this.password = password;
+        this.salt = salt;
         this.email = email;
-        this.salt=salt;
     }
 
     public int getUserId() {
@@ -52,12 +54,20 @@ public class User implements Serializable {
         this.username = username;
     }
 
-    public String getPassword() {
+    public byte[] getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(byte[] password) {
         this.password = password;
+    }
+
+    public byte[] getSalt() {
+        return salt;
+    }
+
+    public void setSalt(byte[] salt) {
+        this.salt = salt;
     }
 
     public String getEmail() {
@@ -67,23 +77,14 @@ public class User implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-    
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((email == null) ? 0 : email.hashCode());
-        result = prime * result + ((password == null) ? 0 : password.hashCode());
-        result = prime * result + ((salt == null) ? 0 : salt.hashCode());
+        result = prime * result + Arrays.hashCode(password);
+        result = prime * result + Arrays.hashCode(salt);
         result = prime * result + userId;
         result = prime * result + userTypeId;
         result = prime * result + ((username == null) ? 0 : username.hashCode());
@@ -104,15 +105,9 @@ public class User implements Serializable {
                 return false;
         } else if (!email.equals(other.email))
             return false;
-        if (password == null) {
-            if (other.password != null)
-                return false;
-        } else if (!password.equals(other.password))
+        if (!Arrays.equals(password, other.password))
             return false;
-        if (salt == null) {
-            if (other.salt != null)
-                return false;
-        } else if (!salt.equals(other.salt))
+        if (!Arrays.equals(salt, other.salt))
             return false;
         if (userId != other.userId)
             return false;
@@ -128,7 +123,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "User [email=" + email + ", password=" + password + ", salt=" + salt + ", userId=" + userId
-                + ", userTypeId=" + userTypeId + ", username=" + username + "]";
+        return "User [email=" + email + ", password=" + Arrays.toString(password) + ", salt=" + Arrays.toString(salt)
+                + ", userId=" + userId + ", userTypeId=" + userTypeId + ", username=" + username + "]";
     }
 }

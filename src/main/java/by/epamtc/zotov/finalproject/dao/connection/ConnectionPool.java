@@ -2,6 +2,7 @@ package by.epamtc.zotov.finalproject.dao.connection;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -12,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 
 public class ConnectionPool {
     private static final String DB_PROPERTIES_FILE = "db.properties";
+    private Properties properties;
     private BlockingQueue<Connection> freeConnections;
     private BlockingQueue<Connection> busyConnections;
     private static ConnectionPool instance;
@@ -19,7 +21,7 @@ public class ConnectionPool {
 
     private ConnectionPool() {
         Connection connection = null;
-        Properties properties = new Properties();
+        properties = new Properties();
 
         try {
             properties.load(getClass().getClassLoader().getResourceAsStream(DB_PROPERTIES_FILE));
@@ -28,7 +30,7 @@ public class ConnectionPool {
             int poolCapacity = Integer.parseInt(properties.getProperty("capacity"));
             freeConnections = new ArrayBlockingQueue<Connection>(poolCapacity);
             busyConnections = new ArrayBlockingQueue<Connection>(poolCapacity);
-            
+
             for (int i = 0; i < poolCapacity; i++) {
                 connection = DriverManager.getConnection(properties.getProperty("url"), properties.getProperty("user"),
                         properties.getProperty("password"));
@@ -36,14 +38,14 @@ public class ConnectionPool {
             }
         } catch (IOException e) {
             logger.fatal("Couldn't load properties", e);
-        } catch (SQLException e) {
-            logger.fatal("Couldn't create connections", e);
         } catch (ClassNotFoundException e) {
             logger.fatal("Couldn't load driver class", e);
+        } catch (SQLException e) {
+            logger.fatal("Couldn't create connections", e);
         }
     }
 
-    //TODO ASK ABOUT INNIT
+    // TODO ASK ABOUT INNIT
     public static void initialize() {
         if (instance == null) {
             instance = new ConnectionPool();
@@ -83,7 +85,7 @@ public class ConnectionPool {
     public void destroy() {
         closeConnections(freeConnections);
         closeConnections(busyConnections);
-        // TODO uregister driver
+        deregisterDriver();
     }
 
     private void closeConnections(BlockingQueue<Connection> queue) {
@@ -91,8 +93,19 @@ public class ConnectionPool {
             try {
                 connection.close();
             } catch (SQLException e) {
-                logger.error("Exception while closing connections", e);
+                logger.error("Exception while closing a connection", e);
             }
+        }
+    }
+
+    private void deregisterDriver() {
+        Driver driver=null;
+        
+        try {
+            driver = DriverManager.getDriver(properties.getProperty("url"));
+            DriverManager.deregisterDriver(driver);
+        } catch (SQLException e) {
+            logger.error("Exception while deregistering the driver", e);
         }
     }
 }
