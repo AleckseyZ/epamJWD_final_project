@@ -22,7 +22,7 @@ public class SignUpCommand implements Command {
         try {
             if (ServiceFactory.getUserService().addUser(request.getParameter("username"),
                     request.getParameter("password").toCharArray(), request.getParameter("email"))) {
-                response.sendRedirect(RedirectPath.HOME_PAGE_REDIRECT);
+                response.sendRedirect(RedirectPath.LOGIN_PAGE_REDIRECT);
             } else {
                 response.sendRedirect(RedirectPath.SIGNUP_PAGE_REDIRECT);
             }

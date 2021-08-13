@@ -76,4 +76,17 @@ public class UserServiceImpl implements UserService {
 
         return hashedPassword;
     }
+
+    @Override
+    public String getUserTypeByUsername(String username) throws ServiceException {
+        String userType = null;
+
+        try {
+            userType = DAOFactory.getUserDAO().getUserTypeByUsername(username);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+
+        return userType;
+    }
 }

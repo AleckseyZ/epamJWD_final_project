@@ -11,16 +11,16 @@ import by.epamtc.zotov.finalproject.dao.connection.ConnectionPool;
 import by.epamtc.zotov.finalproject.exception.DAOException;
 
 public class TagDAOimplSQL implements TagDAO {
-    private static final String GET_TAGS_BY_BOOK_ID = "SELECT tag_id, tag_name FROM tags LEFT JOIN Tags_tags using(tag_id) WHERE books_tags.book_id  = ?";
+    private static final String GET_TAGS_BY_BOOK_ID = "SELECT tag_name FROM tags LEFT JOIN books_tags using(tag_id) WHERE books_tags.book_id  = ?";
 
     @Override
-    public List<String> getTagsByBookId(int tagId) throws DAOException {
+    public List<String> getTagsByBookId(int bookId) throws DAOException {
         List<String> Tags = new ArrayList<>();
 
         Connection connection = ConnectionPool.getInstance().takeConnection();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(GET_TAGS_BY_BOOK_ID);
-            preparedStatement.setInt(1, tagId);
+            preparedStatement.setInt(1, bookId);
             ResultSet result = preparedStatement.executeQuery();
 
             while (result.next()) {

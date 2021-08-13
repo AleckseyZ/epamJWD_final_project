@@ -38,7 +38,7 @@ public class BookServiceImpl implements BookService {
             }
         }
 
-        return books;
+        return foundBooks;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class BookServiceImpl implements BookService {
             }
         }
 
-        return books;
+        return foundBooks;
     }
 
     @Override

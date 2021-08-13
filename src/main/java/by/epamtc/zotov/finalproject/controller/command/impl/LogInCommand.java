@@ -20,15 +20,23 @@ public class LogInCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         boolean isAuthentic = false;
+        String username = request.getParameter("username");
 
         try {
-            isAuthentic = ServiceFactory.getUserService().authenticate(request.getParameter("username"),
+            isAuthentic = ServiceFactory.getUserService().authenticate(username,
                     request.getParameter("password").toCharArray());
         } catch (ServiceException e) {
             logger.error("Exception during authentification", e);
         }
 
         if (isAuthentic) {
+            try {
+                request.getSession().setAttribute("role",
+                        ServiceFactory.getUserService().getUserTypeByUsername(username));
+            } catch (ServiceException e) {
+                logger.error("Exception while retriving usertype", e);
+            }
+
             response.sendRedirect(RedirectPath.HOME_PAGE_REDIRECT);
         } else {
             request.setAttribute("failed", true);
