@@ -1,0 +1,17 @@
+<taglib>
+<tlib-version>1.0</tlib-version>
+<jsp-version>2.0</jsp-version>
+<short-name>Library TLD</short-name>
+<uri>library/customTags</uri>
+
+<tag>
+    <name>language</name>
+    <tag-class>by.epamtc.zotov.finalproject.controller.jsptag.LanguageTagHandler</tag-class>
+    <attribute>
+        <name>defaultLanguage</name>
+        <required>true</required>
+        <type>java.lang.String</type>
+    </attribute>
+</tag>
+
+</taglib>
